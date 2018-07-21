@@ -4,3 +4,4 @@
 * [Seunzi](https://github.com/Seunzi)
 * [以战养战](https://github.com/ricksolaris)
 * [以战养战](https://github.com/ricksolaris) ISSUE 2
+* [落雨](https://github.com/gywang-)
