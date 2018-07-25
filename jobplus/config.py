@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# -*- coding: <encoding name> -*-
+# -*- coding: utf8 -*-
 
 """jobplus.config
 jobplus config file
@@ -11,7 +11,7 @@ jobplus config file
         ...
         app.config.from_object(configs.get(config))
         ...
-        
+
 """
 
 import os
