@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#/usr/bin/python3
 # -*- coding: <encoding name> -*-
 
 from jobplus.app import create_app
