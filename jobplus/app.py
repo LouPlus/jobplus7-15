@@ -18,7 +18,7 @@ def register_extensions(app): #flask所需插件注册
 def register_blueprints(app):
     from .handlers import blueprints
     for bp in blueprints:
-        app.register_blueprints(bp)
+        app.register_blueprint(bp)
 
 def register_error_handlers(app):
     '''因为使用接口通信，出错也返回json数据'''
