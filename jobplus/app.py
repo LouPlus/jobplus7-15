@@ -1,4 +1,4 @@
-#/!usr/bin/python3
+#!/usr/bin/python3
 # -*- condig:utf-8 -*-
 
 from flask import Flask,render_template
