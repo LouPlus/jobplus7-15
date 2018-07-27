@@ -1,3 +1,107 @@
+
+<!-- include block:
+     block title;
+     block head; 
+     block body; 
+     block footer;
+
+     block head-css;
+     block tail-css;-->
+
+
 <!DOCTYPE html>
 <html lang="zh-CN">
+
+    <!--头部，与浏览器交流-->
+    <head>
+    <!--meta 告诉浏览器编码类型 -->
+    <meta charset='UTF-8'>
+    <title>{% block title%}{% endblock%}</title>
+    <!--Bootstrap CDN 核心 CSS 文件 -->
+    {% block head_css %}
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">                                                            
+    <link rel="stylesheet" href="static/main.css">                         
+    {% endblock %}
+    </head>
+
+
+    <!--显示内容-->
+    <body>
+    <!--导航栏-->
+    <nav class ='navbar navbar-inverse'>
+        <div class='container'>
+            <!-- -->
+            <div class ='navbar-hander'>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Jobplus</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                
+                 <!--导航栏（左)-->
+                <ul class="nav navbar-nav">
+                    <li class='active'><a href="#">职位<span class='sr-only'>(current)</span></a></li>
+                    <li class="active"><a href="#">公司<span class='sr-only'>(current)</span></a></li>
+                    <!--(未实现）如果用户通过认证（authenticated）且是管理者，显示连接 -->
+
+
+                </ul>  
+                      
+                <!--导航栏（右-->
+                <ul class="nav navbar-nav navbar-right">
+                    <!--(未实现)根据是否认证，显示对应连接-->
+                    <li><a href='#'>用户注册</a></li>
+                    <li><a href='#'>企业注册</a></li>
+                    <li><a href='#'>登录</a></li>
+                </ul>
+            </div><!--.navbar-collapse-->
+        </div><!--/.container -->
+    </nav>
+    
+
+
+
+        <!--头部，流体（fluid）容器（container）-->
+        <div class='container-fluid header'>
+            {% block head %}{% endblock %}
+        </div>
+
+
+        <!--用来显示flash 模块,加强用户体验-->
+        <div class='container'>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if message %}
+            {% for category,message in messages %}
+            <div class='alert alert-{{ category }} alert-dismissible' role='alert'>
+                <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <!--身体-->
+        {% block body%}{% endblock %}
+
+        <!--脚-->
+        {% block footer %}
+         <div class='footer'>Copyright @ 2018 By 实验楼</div>
+        {% endblock %}
+
+    
+
+    {% block tail_js %}
+    <!--Bootstrap CND-->
+    <!--jQuery 文件-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--Bootstrap 核心 JavaScrip 文件-->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    {% endblock %}
+    </body>
+
 </html>
