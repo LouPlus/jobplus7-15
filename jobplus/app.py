@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# -*- coding: <encoding name> -*-
+# -*- coding: utf-8 -*-
 
 from flask import Flask,render_template
 from flask_migrate import Migrate

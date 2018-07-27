@@ -1,3 +1,3 @@
 #!/usr/bin/python3
-# -*- coding: <encoding name> -*-
+# -*- coding: utf-8 -*-
 

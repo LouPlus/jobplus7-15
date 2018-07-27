@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# -*- coding: <encoding name> -*-
+# -*- coding:utf-8 -*-
 
 from jobplus.app import create_app
 
