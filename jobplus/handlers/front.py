@@ -25,7 +25,7 @@ def companyregister():
           #将form从用户得到的数据，传给数据库。返回一个User对象。
           company_user.role = User.ROLE_COMPANY #改变User对象role
           db.session.add(company_user) #更新数据
-          dv.session.commit
+          dv.session.commit()
           flash('注册成功，请登录','success') 
           return redirect(url_for('.login'))  #跳转到login 登录页面
       return render_template('companyregister.html',form=form)
