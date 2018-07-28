@@ -11,12 +11,12 @@
         {{ .. }}
 
 
-        {% else field.type == 'SubmitField' %}
+        {% elif field.type == 'SubmitField' %}
         <!--如果是submitfield 单独处理-->
         {{ form.submit(class='btn btn-primary',type='submit') }}
 
 
-        {% else field.type == 'BooleanField' %}
+        {% elif field.type == 'BooleanField' %}
         <!--如果是booleanfield 单独处理-->
         <div class='checkbox'>
         <!--选择框-->
@@ -25,12 +25,12 @@
         
         
         {% else %}
-        <div class='form-group{% if field.error %}has error{% endif %}'>
+        <div class='form-group{% if field.errors %}has error{% endif %}'>
         <!--validate_on_submit后,form错误显示-->
             <!--渲染field.label-->
             <!--渲染field,生成一个<input>标签，传人标签属性-->
             {{ field.label }} {{ field(class='form-control') }}
-            {% if field.error %}
+            {% if field.errors %}
             <!--当error不为空，显示每个error-->
                 {% for error in field.errors %}
                 <span class='help-block'>{{ error }}</span>
