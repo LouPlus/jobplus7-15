@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% from 'macro.html' import render_form %}
+
+{% block title %}
+user
+{% endblock %}
+
+{% block body %}
+<div class='form'>
+    {{ render_form(form,url_for('front.userregister')) }}
+</div>
+{% endblock %}

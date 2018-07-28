@@ -30,3 +30,13 @@ def companyregister():
           return redirect(url_for('.login'))  #跳转到login 登录页面
       return render_template('companyregister.html',form=form)
 
+
+#用户注册
+@front.route('/userregister',methods=['GET','POST'])
+def userregister():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        form.create_user()
+        flash('注册成功，清登录','success')
+        return redirect(url_for('.login'))
+    return render_template('userregister.html',form=form)
