@@ -17,8 +17,8 @@ def index():
 def companyregister():
       form = RegisterForm()  
       #引用flask-WTF,基类FlaskForm生成的对象。实现，pychon创建html的form。
-      form.name.label = '企业用户' 
-      #改变form.name.label 属性值（个人用户为企业用户）
+      form.name.label = '企业名称' 
+      #改变form.name.label 属性值（个人名称为企业名称）
       if form.validate_on_submit():  
           # validate_on_submit来自于，flask-WTF,提供的FlaskForm的方法中。
           company_user = form.create_user() 
