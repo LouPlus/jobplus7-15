@@ -9,8 +9,8 @@ from jobplus.models import db,User
 class RegisterForm():
     username = StringField('用户名',validators=[Required(),Length(3,24)])
     email = StringField('邮件',validators=[Required(),Email()])
-    password = PassordField('密码',validators=[Required(),Length(6,24)])
-    repeat_password = PasswordField('重复密码',validators=[Required(),EqualTo(password)])
+    password = PasswordField('密码',validators=[Required(),Length(6,24)])
+    repeat_password = PasswordField('重复密码',validators=[Required(),EqualTo('password')])
     submit = SubmitField()
 
     def validate_username(self,field):
