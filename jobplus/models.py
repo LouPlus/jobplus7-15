@@ -39,11 +39,14 @@ class User(Base, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, index=True, nullable=False)
     email = db.Column(db.String(64), unique=True, index=True, nullable=False)
+    phone = db.Column(db.String(11))
     password = db.Column('password', db.String(256), nullable=False)
     role = db.Column(db.SmallInteger, default=USER)     # 默认求职者用户
     resume = db.Column(db.String(64), unique=True, index=True, nullable=False)   # 用户简历
     upload_resume = db.Column(db.String(64))                           # 上传简练，string存储地址
     link_jobs = db.relationship('Job', secondary=user_job)
+    # User status (is disable?), True for Disbale, False for Enable
+    is_disable = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return '<User:{}>'.format(self.username)

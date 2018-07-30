@@ -1,37 +1,37 @@
 {% macro render_form(form,url)%} 
-<!--´´½¨ºê render_form,´«Èë²ÎÊýform,url-->
+<!--ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ render_form,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½form,url-->
 <form method='POST' action='{{ url }}'>
-<!--ÓÃform±êÇ©°ü¹üºê£¬POST·½·¨ÉÏ´«Êý¾Ý£¬ÉÏ´«µÄÂ·ÓÉµØÖ·-->
+<!--ï¿½ï¿½formï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½ï¿½ê£¬POSTï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½Ï´ï¿½ï¿½ï¿½Â·ï¿½Éµï¿½Ö·-->
     {{form.csrf_token}}
-    <!--²úÉúcsrf_tokenÖµ£¬Õâ¸öÖµÓÃÀ´·À»¤csrf¹¥»÷-->
+    <!--ï¿½ï¿½ï¿½ï¿½csrf_tokenÖµï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½csrfï¿½ï¿½ï¿½ï¿½-->
     {{% for field in form %}}
 
         {{if field.type == 'CSRFTokenField' }}
-        <!--Èç¹ûÊÇcsrf_token ¾Í²»ÔÙäÖÈ¾-->
+        <!--ï¿½ï¿½ï¿½ï¿½ï¿½csrf_token ï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½È¾-->
         {{ .. }}
 
 
         {% elif field.type == 'SubmitField' %}
-        <!--Èç¹ûÊÇsubmitfield µ¥¶À´¦Àí-->
+        <!--ï¿½ï¿½ï¿½ï¿½ï¿½submitfield ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-->
         {{ form.submit(class='btn btn-primary',type='submit') }}
 
 
         {% elif field.type == 'BooleanField' %}
-        <!--Èç¹ûÊÇbooleanfield µ¥¶À´¦Àí-->
+        <!--ï¿½ï¿½ï¿½ï¿½ï¿½booleanfield ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-->
         <div class='checkbox'>
-        <!--Ñ¡Ôñ¿ò-->
+        <!--Ñ¡ï¿½ï¿½ï¿½-->
             <label>{{ field() }} {{ field.label.text}}</label>
         </div>
         
         
         {% else %}
         <div class='form-group{% if field.errors %}has error{% endif %}'>
-        <!--validate_on_submitºó,form´íÎóÏÔÊ¾-->
-            <!--äÖÈ¾field.label-->
-            <!--äÖÈ¾field,Éú³ÉÒ»¸ö<input>±êÇ©£¬´«ÈË±êÇ©ÊôÐÔ-->
+        <!--validate_on_submitï¿½ï¿½,formï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾-->
+            <!--ï¿½ï¿½È¾field.label-->
+            <!--ï¿½ï¿½È¾field,ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½<input>ï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½ï¿½Ë±ï¿½Ç©ï¿½ï¿½ï¿½ï¿½-->
             {{ field.label }} {{ field(class='form-control') }}
             {% if field.errors %}
-            <!--µ±error²»Îª¿Õ£¬ÏÔÊ¾Ã¿¸öerror-->
+            <!--ï¿½ï¿½errorï¿½ï¿½Îªï¿½Õ£ï¿½ï¿½ï¿½Ê¾Ã¿ï¿½ï¿½error-->
                 {% for error in field.errors %}
                 <span class='help-block'>{{ error }}</span>
                 {% endfor%}
@@ -41,4 +41,28 @@
         {% endif %}
     {% endfor%}
 </form>
+{% endmacro %}
+
+{% macro render_pagination(pagination, endpoint) %}
+<nav class="nav-pagination" aria-label="Page navigation">
+    <ul class=pagination>
+    <!-- é“¾æŽ¥åˆ°ä¸Šä¸€é¡µçš„å·¦ç®­å¤´ï¼ˆ&laquo;ï¼‰ï¼Œå¦‚æžœæ²¡æœ‰ä¸Šä¸€é¡µè®¾ä¸º disable çŠ¶æ€ -->
+    <li{% if not pagination.has_prev %} class="disabled"{% endif %}><a href="{{url_for(endpoint, page=pagination.prev_num) if pagination.has_prev else '#'}}">&laquo;</a></li>
+    <!-- æ¸²æŸ“æ¯ä¸ªé¡µæ•°çš„æŒ‰é’® -->
+    {% for page in pagination.iter_pages() %}
+        {% if page %}
+            {% if page != pagination.page %}
+            <li><a href="{{ url_for(endpoint, page=page) }}">{{ page }}</a></li>
+            {% else %}
+            <!-- å¦‚æžœé¡µæ•°æ˜¯å½“å‰é¡µï¼Œè®¾ç½®ä¸ºé€‰ä¸­çŠ¶æ€ -->
+            <li class="active"><a href="#">{{page}} <span class="sr-only">(current)</span></a></li>
+            {% endif %}
+        {% else %}
+            <span class=ellipsis>â€¦</span>
+        {% endif %}
+    {% endfor %}
+    <!-- é“¾æŽ¥åˆ°ä¸‹ä¸€é¡µçš„å³ç®­å¤´ï¼ˆ&raquo;ï¼‰ï¼Œå¦‚æžœæ²¡æœ‰ä¸‹ä¸€é¡µè®¾ä¸º disable çŠ¶æ€ -->
+    <li{% if not pagination.has_next %} class="disabled"{% endif %}><a href="{{url_for(endpoint, page=pagination.next_num) if pagination.has_next else '#'}}">&raquo;</a></li>
+    </ul>
+</nav>
 {% endmacro %}
