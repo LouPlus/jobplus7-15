@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-from flash-wtf import FlashForm
+from flask_wtf import FlaskForm
 from wtforms import StringField,PasswordField,SubmitField 
 from wtforms.validators import Required,Length,EqualTo,Email
 from jobplus.models import db,User

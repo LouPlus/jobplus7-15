@@ -2,19 +2,23 @@
 # -*- condig:utf-8 -*-
 
 from flask import Flask,render_template
-#from flask_migrate import Migrate
-#from flask_login import LoginManager
+from flask_migrate import Migrate
+from flask_login import LoginManager
 
 from jobplus.config import configs
-#from jobplus.models import db,User #按需求添加修改 
+from jobplus.models import db,User #按需求添加修改 
 
 def register_extensions(app): #flask所需插件注册
-    pass
-'''
     db.init_app(app)
     Migrate(app,db)
     login_manager = LoginManager()
-'''
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def user_loader(id):
+        return User.query.get(id)
+    
+    login_manager.login_view = 'front.index'
     #按照个人使用添加完善
 
 def register_blueprints(app):
