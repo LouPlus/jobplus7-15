@@ -4,11 +4,11 @@
 <!--用form标签包裹宏，POST方法上传数据，上传的路由地址-->
     {{form.csrf_token}}
     <!--产生csrf_tokenֵ值，这个值用来防护csrf攻击-->
-    {{% for field in form %}}
+    {% for field in form %}
 
-        {{if field.type == 'CSRFTokenField' }}
+        {%if field.type == 'CSRFTokenField' %}
         <!--如果是csrf_token 就不再渲染-->
-        {{ .. }}
+        {{ '' }}
 
 
         {% elif field.type == 'SubmitField' %}
