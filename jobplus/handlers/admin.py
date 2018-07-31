@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, current_app, redirect, url_for, flash
 from jobplus.decorators import admin_required
 from jobplus.models import User, Company, db
-from jobplus.forms import RegisterForm
+from jobplus.forms import RegisterForm, AddUserForm, AddCompanyForm
 
 admin = Blueprint('admin',__name__,url_prefix='/admin')
 
@@ -20,3 +20,45 @@ def users():
         error_out=False
     )
     return render_template('admin/users.html',pagination=pagination)
+
+@admin.route('/users/adduser',methods=['GET','POST'])
+@admin_required
+def adduser():
+    form = AddUserForm()
+    if form.validate_on_submit():
+        form.create_user()
+        flash('求职者添加成功','success')
+        return redirect(url_for('admin.users'))
+    return render_template('admin/adduser.html', form=form)
+
+@admin.route('/users/addcompany',methods=['GET','POST'])
+@admin_required
+def addcompany():
+    form = AddCompanyForm()
+    if form.validate_on_submit():
+        form.create_company()
+        flash('公司添加成功','success')
+        return redirect(url_for('admin.users'))
+    return render_template('admin/addcompany.html', form=form)
+
+@admin.route('/users/edituser',methods=['GET','POST'])
+@admin_required
+def edituser(user_id):
+    user = User.query.get_or_404(user_id)
+    form = AddUserForm(obj=user)
+    if form.validate_on_submit():
+        form.update_user(user)
+        flash('用户更新成功','success')
+        return render_template(url_for('admin.users'))
+    return render_template('admin/edituser.html',form=form,user=user)
+
+@admin.route('/users/editcompany',methods=['GET','POST'])
+@admin_required
+def editcompany(company_id):
+    company = Company.query.get_or_404(company_id)
+    form = AddCompanyForm(obj=company)
+    if form.validate_on_submit():
+        form.update_company(company)
+        flash('企业更新成功','success')
+        return render_template(url_for('admin.users'))
+    return render_template('admin/editcompany.html',form=form,company=company)

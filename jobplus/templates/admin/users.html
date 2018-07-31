@@ -43,10 +43,10 @@ Admin - Users
                 <td>{% if user.company %}{{ user.company.site }}{% else %}{% endif %}</td>
                 <td>
                     <div class="btn-group" role="group">
-                        <a href="#" type="button" class="btn-defalut" title="编辑">
+                        <a href="{% if user.company %}{{ url_for('admin.editcompany', company_id=user.company.id) }}{% else %}{{ url_for('admin.edituser', user_id=user.id) }}{% endif %}" type="button" class="btn-defalut" title="编辑">
                             <span class="glyphicon glyphicon-pencil" title="编辑" aria-hidden="true"></span>
                         </a>
-                        <a href="#" type="button" class="btn-defalut" title={% if user.is_disable %}"启用"{% else %}"禁用"{% endif %}>
+                        <a href="#" type="button" class="btn-defalut" title="{% if user.is_disable %}启用{% else %}禁用{% endif %}">
                             {% if user.is_disable %}
                             <span class="glyphicon glyphicon-ok-circle" title="启用" aria-hidden="true"></span>
                             {% else %}

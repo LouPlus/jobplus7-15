@@ -1,0 +1,7 @@
+{% extends "admin/admin_base.html" %}
+{% from "macros.html" import render_form %}
+
+{% block admin %}
+<h4>编辑企业</h4>
+{{ render_form(form,url_for('admin.editcompany', company_id=company.id)) }}
+{% endblock %}

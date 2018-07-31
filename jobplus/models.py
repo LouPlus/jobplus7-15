@@ -47,6 +47,7 @@ class User(Base, UserMixin):
     link_jobs = db.relationship('Job', secondary=user_job)
     # User status (is disable?), True for Disbale, False for Enable
     is_disable = db.Column(db.Boolean, default=False)
+    real_name = db.Column(db.String(20))
 
     def __repr__(self):
         return '<User:{}>'.format(self.username)
