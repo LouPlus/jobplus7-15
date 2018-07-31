@@ -33,7 +33,7 @@ class RegisterForm(FlaskForm):
         db.session.commit()
         return user
 
-#注册表单
+#登录表单
 class LoginForm(FlaskForm):
     email = StringField('邮件', validators=[Required(), Email()])
     password = PasswordField('密码', validators=[Required(), Length(6, 24)])
