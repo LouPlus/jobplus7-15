@@ -4,3 +4,4 @@ mysqlclient
 flask-migrate
 flask-wtf
 flask-login
+werkzeug

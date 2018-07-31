@@ -1,0 +1,44 @@
+{% macro render_form(form,url)%} 
+<!--创建宏 render_form,传入参数form,url-->
+<form method='POST' action='{{ url }}'>
+<!--用form标签包裹宏，POST方法上传数据，上传的路由地址-->
+    {{form.csrf_token}}
+    <!--产生csrf_token值，这个值用来防护csrf攻击-->
+    {{% for field in form %}}
+
+        {{if field.type == 'CSRFTokenField' }}
+        <!--如果是csrf_token 就不再渲染-->
+        {{ .. }}
+
+
+        {% elif field.type == 'SubmitField' %}
+        <!--如果是submitfield 单独处理-->
+        {{ form.submit(class='btn btn-primary',type='submit') }}
+
+
+        {% elif field.type == 'BooleanField' %}
+        <!--如果是booleanfield 单独处理-->
+        <div class='checkbox'>
+        <!--选择框-->
+            <label>{{ field() }} {{ field.label.text}}</label>
+        </div>
+        
+        
+        {% else %}
+        <div class='form-group{% if field.errors %}has error{% endif %}'>
+        <!--validate_on_submit后,form错误显示-->
+            <!--渲染field.label-->
+            <!--渲染field,生成一个<input>标签，传人标签属性-->
+            {{ field.label }} {{ field(class='form-control') }}
+            {% if field.errors %}
+            <!--当error不为空，显示每个error-->
+                {% for error in field.errors %}
+                <span class='help-block'>{{ error }}</span>
+                {% endfor%}
+            {% endif %}
+        </div>
+
+        {% endif %}
+    {% endfor%}
+</form>
+{% endmacro %}
