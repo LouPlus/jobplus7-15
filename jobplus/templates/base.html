@@ -55,8 +55,8 @@
                 <!--导航栏（右-->
                 <ul class="nav navbar-nav navbar-right">
                     <!--(未实现)根据是否认证，显示对应连接-->
-                    <li><a href='#'>用户注册</a></li>
-                    <li><a href='#'>企业注册</a></li>
+                    <li><a href='{{ url_for('front.userregister') }}'>用户注册</a></li>
+                    <li><a href='{{ url_for('front.companyregister') }}'>企业注册</a></li>
                     <li><a href='#'>登录</a></li>
                 </ul>
             </div><!--.navbar-collapse-->

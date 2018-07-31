@@ -5,7 +5,7 @@ from flask import Blueprint,render_template,flash,redirect,url_for
 from jobplus.forms import RegisterForm
 from jobplus.models import db,User
 
-front = Blueprint('front',__name__,url_prefix='/')
+front = Blueprint('front',__name__)
 
 @front.route('/')
 def index():
@@ -23,7 +23,7 @@ def companyregister():
           # validate_on_submit来自于，flask-WTF,提供的FlaskForm的方法中。
           company_user = form.create_user() 
           #将form从用户得到的数据，传给数据库。返回一个User对象。
-          company_user.role = User.ROLE_COMPANY #改变User对象role
+          company_user.role = User.company #改变User对象role
           db.session.add(company_user) #更新数据
           dv.session.commit()
           flash('注册成功，请登录','success') 
@@ -40,3 +40,4 @@ def userregister():
         flash('注册成功，清登录','success')
         return redirect(url_for('.login'))
     return render_template('userregister.html',form=form)
+
