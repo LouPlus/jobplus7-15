@@ -2,8 +2,10 @@
 # -*- coding: <encoding name> -*-
 
 from flask import Blueprint,render_template,flash,redirect,url_for
-from jobplus.forms import RegisterForm
+from jobplus.forms import RegisterForm,LoginForm
 from jobplus.models import db,User
+from flask_login import login_user
+
 
 front = Blueprint('front',__name__)
 
@@ -41,3 +43,19 @@ def userregister():
         return redirect(url_for('.login'))
     return render_template('userregister.html',form=form)
 
+
+#登录页面
+@front.route('/login',methods=['GET','POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        # 使用flask-login模块，login_user函数（传入User对象，布尔值）实现注册
+        login_user(user,form.remember_me.data)
+        next = 'user.profile'
+        if user.admin:
+            next = 'admin.index'
+        if user.company:
+            next = 'company.profile'
+        return redirect(url_for(next))
+    return render_template('login.html',form=form)
