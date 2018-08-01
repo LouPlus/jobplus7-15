@@ -50,6 +50,34 @@ class LoginForm(FlaskForm):
             raise ValidationError('密码错误')
 
 
+#求职者，个人信息表
+class UserProfileForm(FlaskForm):
+    real_name = StringField('姓名')
+    email = StringField('邮箱',validators=[Required(), Email()])
+    password = PasswordField('密码（不填写保持不变）')
+    phone = StringField('手机号')
+   # work_years = IntegerField('工作年限')
+    resume = StringField('简历地址')
+    submit = SubmitField('提交')
+
+    def validate_phone(self,field): #电话验证器
+        phone = field.data
+        if phone[:2] not in ('13','15','18') and len(phone) !=11 :
+            raise ValidationError('请输入有效的手机号')
+    
+    #要查看User对象的属性
+    def updata_profile(self,user): #传入User对象，将相应数据写入，传入数据库
+        user.real_name = self.real_name.data
+        user.email = self.email.data
+        if self.password.data :
+            user.password = self.password.data
+        user.phone = self.phone.data
+       # user.work_years = self.work_years.data
+        user.resume = self.resume.data
+        db.session.add(user)
+        db.session.commit()
+
+
 class AddUserForm(FlaskForm):
     real_name = StringField('姓名', validators=[Required(), Length(2,20)])
     email = StringField('邮箱', validators=[Required(),Email()])
