@@ -115,6 +115,7 @@ class CompanyProfileForm(FlaskForm):
         db.session.commit()
 
 
+
 class AddUserForm(FlaskForm):
     real_name = StringField('姓名', validators=[Required(), Length(2,20)])
     email = StringField('邮箱', validators=[Required(),Email()])
