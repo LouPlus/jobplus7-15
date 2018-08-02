@@ -78,6 +78,44 @@ class UserProfileForm(FlaskForm):
         db.session.commit()
 
 
+
+class CompanyProfileForm(FlaskForm):
+    name = StringField('企业名称')
+    email = StringField('邮件',validators=[Required(),Email()])
+    password = PasswordField('密码（不填写保持不变）')
+    slug = StringField('Slug',validators=[Required(),Length(3,24)])
+    location = StringField('地址',validators=[Length(0,64)])
+    contact = StringField('公司电话')
+    site = StringField('公司网站',validators=[Length(0,64)])
+    logo = StringField('Logo')
+    description = StringField('一句话描述',validators=[Length(0,100)])
+    about = TextAreaField('公司详情',validators=[Length(0,1024)])
+    submit = SubmitField('提交')
+
+    def validate_contact(self,field):
+        contact = field.data
+        if contact[:2] not in ('13','15','18') and len(contact) !=11:
+            raise ValidationError('请输入有效的手机号')
+
+    def updated_profile(self,user):
+        user.name = self.name.data
+        user.email = self.email.data
+        if self.password.data:
+            user.password = self.password.data
+
+        if user.company:
+            company_detail = user.company
+        else :
+            company_detail = Company()
+            company_detail.user_id = user.id
+        self.populate_obj(company_detail)
+
+        db.session.add(user)
+        db.session.add(company_detail)
+        db.session.commit()
+
+
+
 class AddUserForm(FlaskForm):
     real_name = StringField('姓名', validators=[Required(), Length(2,20)])
     email = StringField('邮箱', validators=[Required(),Email()])

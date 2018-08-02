@@ -87,7 +87,7 @@
         <!--用来显示flash 模块,加强用户体验-->
         <div class='container'>
         {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if message %}
+            {% if messages %}
             {% for category,message in messages %}
             <div class='alert alert-{{ category }} alert-dismissible' role='alert'>
                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
@@ -104,8 +104,8 @@
         {% block footer %}
          <div class='footer'>Copyright @ 2018 By 实验楼</div>
         {% endblock %}
-
-    
+        </div><!--container-->
+           
 
     {% block tail_js %}
     <!--Bootstrap CND-->
