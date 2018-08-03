@@ -64,11 +64,11 @@ class User(Base, UserMixin):
         return check_password_hash(self._password, password)
 
     @property
-    def admin(self):
+    def is_admin(self):
         return self.role == self.ADMIN
 
     @property
-    def company(self):
+    def is_company(self):
         return self.role == self.COMPANY
 
 
