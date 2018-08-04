@@ -1,37 +1,37 @@
 {% macro render_form(form,url)%} 
-<!--´´½¨ºê render_form,´«Èë²ÎÊýform,url-->
+<!--åˆ›å»ºå® render_form,ä¼ å…¥å‚æ•°form,url-->
 <form method='POST' action='{{ url }}'>
-<!--ÓÃform±êÇ©°ü¹üºê£¬POST·½·¨ÉÏ´«Êý¾Ý£¬ÉÏ´«µÄÂ·ÓÉµØÖ·-->
+<!--ç”¨formæ ‡ç­¾åŒ…è£¹å®ï¼ŒPOSTæ–¹æ³•ä¸Šä¼ æ•°æ®ï¼Œä¸Šä¼ çš„è·¯ç”±åœ°å€-->
     {{form.csrf_token}}
-    <!--²úÉúcsrf_tokenÖµ£¬Õâ¸öÖµÓÃÀ´·À»¤csrf¹¥»÷-->
-    {{% for field in form %}}
+    <!--äº§ç”Ÿcsrf_tokenÖµå€¼ï¼Œè¿™ä¸ªå€¼ç”¨æ¥é˜²æŠ¤csrfæ”»å‡»-->
+    {% for field in form %}
 
-        {{if field.type == 'CSRFTokenField' }}
-        <!--Èç¹ûÊÇcsrf_token ¾Í²»ÔÙäÖÈ¾-->
-        {{ .. }}
+        {%if field.type == 'CSRFTokenField' %}
+        <!--å¦‚æžœæ˜¯csrf_token å°±ä¸å†æ¸²æŸ“-->
+        {{ '' }}
 
 
         {% elif field.type == 'SubmitField' %}
-        <!--Èç¹ûÊÇsubmitfield µ¥¶À´¦Àí-->
+        <!--å¦‚æžœæ˜¯submitfield å•ç‹¬å¤„ç†-->
         {{ form.submit(class='btn btn-primary',type='submit') }}
 
 
         {% elif field.type == 'BooleanField' %}
-        <!--Èç¹ûÊÇbooleanfield µ¥¶À´¦Àí-->
+        <!--å¦‚æžœæ˜¯booleanfield å•ç‹¬å¤„ç†-->
         <div class='checkbox'>
-        <!--Ñ¡Ôñ¿ò-->
+        <!--é€‰æ‹©æ¡†-->
             <label>{{ field() }} {{ field.label.text}}</label>
         </div>
         
         
         {% else %}
         <div class='form-group{% if field.errors %}has error{% endif %}'>
-        <!--validate_on_submitºó,form´íÎóÏÔÊ¾-->
-            <!--äÖÈ¾field.label-->
-            <!--äÖÈ¾field,Éú³ÉÒ»¸ö<input>±êÇ©£¬´«ÈË±êÇ©ÊôÐÔ-->
+        <!--validate_on_submitåŽ,formé”™è¯¯æ˜¾ç¤º-->
+            <!--æ¸²æŸ“field.label-->
+            <!--æ¸²æŸ“field,ç”Ÿæˆä¸€ä¸ª<input>æ ‡ç­¾ï¼Œä¼ å…¥æ ‡ç­¾å±žæ€§-->
             {{ field.label }} {{ field(class='form-control') }}
             {% if field.errors %}
-            <!--µ±error²»Îª¿Õ£¬ÏÔÊ¾Ã¿¸öerror-->
+            <!--å½“errorä¸ä¸ºç©ºï¼Œæ˜¾ç¤ºæ¯ä¸ªerror-->
                 {% for error in field.errors %}
                 <span class='help-block'>{{ error }}</span>
                 {% endfor%}
@@ -41,4 +41,28 @@
         {% endif %}
     {% endfor%}
 </form>
+{% endmacro %}
+
+{% macro render_pagination(pagination, endpoint) %}
+<nav class="nav-pagination" aria-label="Page navigation">
+    <ul class=pagination>
+    <!-- é“¾æŽ¥åˆ°ä¸Šä¸€é¡µçš„å·¦ç®­å¤´ï¼ˆ&laquo;ï¼‰ï¼Œå¦‚æžœæ²¡æœ‰ä¸Šä¸€é¡µè®¾ä¸º disable çŠ¶æ€ -->
+    <li{% if not pagination.has_prev %} class="disabled"{% endif %}><a href="{{url_for(endpoint, page=pagination.prev_num) if pagination.has_prev else '#'}}">&laquo;</a></li>
+    <!-- æ¸²æŸ“æ¯ä¸ªé¡µæ•°çš„æŒ‰é’® -->
+    {% for page in pagination.iter_pages() %}
+        {% if page %}
+            {% if page != pagination.page %}
+            <li><a href="{{ url_for(endpoint, page=page) }}">{{ page }}</a></li>
+            {% else %}
+            <!-- å¦‚æžœé¡µæ•°æ˜¯å½“å‰é¡µï¼Œè®¾ç½®ä¸ºé€‰ä¸­çŠ¶æ€ -->
+            <li class="active"><a href="#">{{page}} <span class="sr-only">(current)</span></a></li>
+            {% endif %}
+        {% else %}
+            <span class=ellipsis>â€¦</span>
+        {% endif %}
+    {% endfor %}
+    <!-- é“¾æŽ¥åˆ°ä¸‹ä¸€é¡µçš„å³ç®­å¤´ï¼ˆ&raquo;ï¼‰ï¼Œå¦‚æžœæ²¡æœ‰ä¸‹ä¸€é¡µè®¾ä¸º disable çŠ¶æ€ -->
+    <li{% if not pagination.has_next %} class="disabled"{% endif %}><a href="{{url_for(endpoint, page=pagination.next_num) if pagination.has_next else '#'}}">&raquo;</a></li>
+    </ul>
+</nav>
 {% endmacro %}

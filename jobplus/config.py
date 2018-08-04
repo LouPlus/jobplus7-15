@@ -12,6 +12,7 @@ jobplus config file
         app.config.from_object(configs.get(config))
         ...
 
+    config can be "development", "production", "testing"
 """
 
 import os

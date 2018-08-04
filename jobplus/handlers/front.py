@@ -2,10 +2,12 @@
 # -*- coding: <encoding name> -*-
 
 from flask import Blueprint,render_template,flash,redirect,url_for
-from jobplus.forms import RegisterForm
+from jobplus.forms import RegisterForm,LoginForm
 from jobplus.models import db,User
+from flask_login import login_user,logout_user,login_required
 
-front = Blueprint('front',__name__,url_prefix='/')
+
+front = Blueprint('front',__name__)
 
 @front.route('/')
 def index():
@@ -23,9 +25,9 @@ def companyregister():
           # validate_on_submit来自于，flask-WTF,提供的FlaskForm的方法中。
           company_user = form.create_user() 
           #将form从用户得到的数据，传给数据库。返回一个User对象。
-          company_user.role = User.ROLE_COMPANY #改变User对象role
+          company_user.role = User.COMPANY #改变User对象role
           db.session.add(company_user) #更新数据
-          dv.session.commit()
+          db.session.commit()
           flash('注册成功，请登录','success') 
           return redirect(url_for('.login'))  #跳转到login 登录页面
       return render_template('companyregister.html',form=form)
@@ -40,3 +42,28 @@ def userregister():
         flash('注册成功，清登录','success')
         return redirect(url_for('.login'))
     return render_template('userregister.html',form=form)
+
+
+#登录页面
+@front.route('/login',methods=['GET','POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        # 使用flask-login模块，login_user函数（传入User对象，布尔值）实现注册
+        login_user(user,form.remember_me.data)
+        next = 'user.profile'
+        if user.is_admin:
+            next = 'admin.index'
+        if user.is_company:
+            next = 'company.profile'
+        return redirect(url_for(next))
+    return render_template('login.html',form=form)
+
+#退出登录
+@front.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('您已经退出登录','success')
+    return redirect(url_for('.index'))

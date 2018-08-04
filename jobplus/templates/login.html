@@ -2,13 +2,13 @@
 {% from 'macros.html' import render_form %}
 
 {% block title %}
-Register
+login
 {% endblock%}
 
 {% block body %}
 <div class='form'>
-
-    <h2>企业注册</h2>
-    {{ render_form(form,url_for('front.companyregister')) }}
+    <h2>登录</h2>
+    {{ render_form(form,url_for('front.login')) }}
 </div>
 {% endblock %}
+
