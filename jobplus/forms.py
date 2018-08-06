@@ -130,8 +130,10 @@ class AddUserForm(FlaskForm):
 
 
     def create_user(self):
-        user = User(real_name=self.real_rname.data,
+        user = User(username=self.real_name.data,
+                    real_name=self.real_name.data,
                     email=self.email.data,
+                    phone=self.phone.data,
                     password=self.password.data)
         db.session.add(user)
         db.session.commit()
@@ -149,7 +151,7 @@ class AddCompanyForm(FlaskForm):
     email = StringField('邮箱', validators=[Required(), Email()])
     password = PasswordField('密码', validators=[Required(), Length(6,24)])
     repeat_password = PasswordField('重复密码', validators=[Required(), EqualTo('password')])
-    site = StringField('企业网站', validators=[Required, URL()])
+    site = StringField('企业网站', validators=[Required(), URL()])
     description = StringField('一句话简介', validators=[Required(), Length(max=100)])
     submit = SubmitField('完成')
 
@@ -163,6 +165,7 @@ class AddCompanyForm(FlaskForm):
 
     def create_company(self):
         user = User(
+            username=self.name.data,
             email=self.email.data,
             password=self.password.data,
             role=20
@@ -171,7 +174,9 @@ class AddCompanyForm(FlaskForm):
                        email=self.email.data,
                        site=self.site.data,
                        description=self.description.data,
-                       user=user
+                       user=user,
+                       logo='',
+                       location=''
                        )
         db.session.add(user)
         db.session.add(company)

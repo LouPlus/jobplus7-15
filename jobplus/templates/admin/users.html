@@ -1,16 +1,16 @@
 {% extends "admin/admin_base.html" %}
-{% from "macros.html" import render_pagiantion %}
+{% from "macros.html" import render_pagination %}
 
 {% block title %}
 Admin - Users
 {% endblock %}
 
 {% block operation %}
-<a href="#" type="button" class="btn btn-primary">
+<a href="{{ url_for('admin.adduser') }}" type="button" class="btn btn-primary">
     <span class="glyphicon glyphicon-plus" aira-hidden="true"></span>
     添加求职者
 </a>
-<a href="#" type="button" class="btn btn-primary">
+<a href="{{ url_for('admin.addcompany') }}" type="button" class="btn btn-primary">
     <span class="glyphicon glyphicon-plus" aira-hidden="true"></span>
     添加企业
 </a>
@@ -34,7 +34,7 @@ Admin - Users
             {% for user in pagination.items %}
             <tr>
                 <td>{{ user.id }}</td>
-                <td>{% if user.admin %}管理员{% elif user.is_company %}公司{% else %}求职者{% endif %}</td>
+                <td>{% if user.is_admin %}管理员{% elif user.is_company %}公司{% else %}求职者{% endif %}</td>
                 <td>{% if user.is_disable %}禁用{% else %}启用{% endif %}</td>
                 <td>{{ user.username }}</td>
                 <td>{{ user.email }}</td>
@@ -46,7 +46,7 @@ Admin - Users
                         <a href="{% if user.is_company %}{{ url_for('admin.editcompany', company_id=user.company.id) }}{% else %}{{ url_for('admin.edituser', user_id=user.id) }}{% endif %}" type="button" class="btn-defalut" title="编辑">
                             <span class="glyphicon glyphicon-pencil" title="编辑" aria-hidden="true"></span>
                         </a>
-                        <a href="#" type="button" class="btn-defalut" title="{% if user.is_disable %}启用{% else %}禁用{% endif %}">
+                        <a href="{% if user.is_disable %}{{ url_for('admin.useraction',user_id=user.id,action='enable') }}{% else %}{{ url_for('admin.useraction',user_id=user.id,action='disable') }}{% endif %}" type="button" class="btn-defalut" title="{% if user.is_disable %}启用{% else %}禁用{% endif %}">
                             {% if user.is_disable %}
                             <span class="glyphicon glyphicon-ok-circle" title="启用" aria-hidden="true"></span>
                             {% else %}
@@ -61,5 +61,5 @@ Admin - Users
     </thead>
 </table>
 
-{{ render_pagiantion(pagination, 'admin.users')}}
+{{ render_pagination(pagination, 'admin.users')}}
 {% endblock %}
