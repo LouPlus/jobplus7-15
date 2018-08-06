@@ -77,12 +77,11 @@ class Company(Base):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), nullable=False, index=True, unique=True)
-    slug = db.Column(db.String(24), nullable=False, index=True, unique=True)
     logo = db.Column(db.String(64), nullable=False)
     # 网址
     site = db.Column(db.String(64), nullable=False)
     # 联系方式
-    contact = db.Column(db.String(24), nullable=False)
+    contact = db.Column(db.String(24))
     email = db.Column(db.String(24), nullable=False)
     # 地址
     location = db.Column(db.String(24), nullable=False)

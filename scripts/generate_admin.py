@@ -2,12 +2,13 @@ import os
 from jobplus.models import db, User
 
 username = 'admin'
+email='admin@jobplus.com'
 password = 'jobplus'
 
 def iter_admin():
     yield User(
             username=username,
-            email='admin@jobplus.com',
+            email=email,
             password=password,
             role=30,
         )

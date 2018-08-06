@@ -41,7 +41,7 @@ def addcompany():
         return redirect(url_for('admin.users'))
     return render_template('admin/addcompany.html', form=form)
 
-@admin.route('/users/edituser',methods=['GET','POST'])
+@admin.route('/users/edituser/<int:user_id>',methods=['GET','POST'])
 @admin_required
 def edituser(user_id):
     user = User.query.get_or_404(user_id)
@@ -49,10 +49,10 @@ def edituser(user_id):
     if form.validate_on_submit():
         form.update_user(user)
         flash('用户更新成功','success')
-        return render_template(url_for('admin.users'))
+        return redirect(url_for('admin.users'))
     return render_template('admin/edituser.html',form=form,user=user)
 
-@admin.route('/users/editcompany',methods=['GET','POST'])
+@admin.route('/users/editcompany/<int:company_id>',methods=['GET','POST'])
 @admin_required
 def editcompany(company_id):
     company = Company.query.get_or_404(company_id)
@@ -60,5 +60,17 @@ def editcompany(company_id):
     if form.validate_on_submit():
         form.update_company(company)
         flash('企业更新成功','success')
-        return render_template(url_for('admin.users'))
+        return redirect(url_for('admin.users'))
     return render_template('admin/editcompany.html',form=form,company=company)
+
+@admin.route('/users/<int:user_id>/<action>')
+@admin_required
+def useraction(user_id,action):
+    user = User.query.get_or_404(user_id)
+    if str(action) == 'disable':
+        user.is_disable=True
+    if (action) == 'enable':
+        user.is_disable=False
+    db.session.add(user)
+    db.session.commit()
+    return redirect(url_for('admin.users'))
