@@ -2,3 +2,41 @@
     width: 400px;
     margin: 0 auto;
 }
+.containter{
+    width:1170px;
+}
+.newest-job-list,
+.newest-company-list{
+    margin-top: 15px;
+}
+.job-box{
+    padding: 13px;
+    border:solid 1px #ddd;
+    border-radius:5px;
+    margin-bottom:15px;
+}
+
+.company-item{
+    text-align:center;
+}
+
+.position-number{
+    border-top:3px solid #eee;
+}
+
+.footer{
+    border-top:1px solid #eee;
+    padding:16px 0 24px;
+    margin-top: 15px;
+    color:#999;
+    font-size:14px;
+}
+
+.list-title{
+    margin: 0 15px;
+}
+.list-more-btn{
+    padding:10px 50px;
+    color:#5cb85c;
+    background:#fff;
+}

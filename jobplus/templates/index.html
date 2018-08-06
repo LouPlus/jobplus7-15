@@ -19,8 +19,9 @@
 </ul>
 <!--职位信息-->
 <div class='newest-job-list'>
-    <div class-'col-sm-6 col-md-4'>
-        <div class'job-box'>
+    {% for i in range(3) %}
+    <div class='col-sm-6 col-md-4'>
+        <div class='job-box'>
             <div class='caption'>
                 <b>爬虫工程师 ［1天前发布］</b>
                 <p>经验1－3年 本科</p>
@@ -46,6 +47,7 @@
            </div><!--media-->
         </div><!--job-box-->
     </div><!--col-sn-6 col-md-4-->
+    {% endfor %}
 </div><!--newest-job-list-->
 
 <p class='list-more text-center'>
@@ -66,9 +68,10 @@
                 <h3>火星科技</h3>
                 <p>移动互联网 不需要融资</p>
             </div>
+            <div class='position-number'>
+                <p>在招职位：3</p>
+            </div>
         </div><!--thumbnail-->
-        <hr>
-        <p>在招职位：3</p>
     </div><!--col-sm-6 col-md-3 company-item-->
 </div><!--newest-company-list-->
 {% endfor %}
