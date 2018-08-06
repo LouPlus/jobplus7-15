@@ -33,7 +33,6 @@ class RegisterForm(FlaskForm):
         db.session.commit()
         return user
 
-<<<<<<< HEAD
 #登录表单
 class LoginForm(FlaskForm):
     email = StringField('邮件', validators=[Required(), Email()])
@@ -117,8 +116,6 @@ class CompanyProfileForm(FlaskForm):
 
 
 
-=======
->>>>>>> fix #34 and fix #35, add some scripts ,fix other small problems
 class AddUserForm(FlaskForm):
     real_name = StringField('姓名', validators=[Required(), Length(2,20)])
     email = StringField('邮箱', validators=[Required(),Email()])
