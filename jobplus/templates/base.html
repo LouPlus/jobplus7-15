@@ -88,13 +88,14 @@
             {% endfor %}
             {% endif %}
         {% endwith %}
-
-
-        <!--头部，流体（fluid）容器（container）-->
-        <div class='container-fluid header'>
-            {% block head %}{% endblock %}
         </div>
 
+        <!--头部，流体（fluid）容器（container）-->
+        <div class='header'>
+            {% block head %}{% endblock %}
+        </div>
+        
+        <div class='container' >
         <!--身体-->
         {% block body%}{% endblock %}
 
