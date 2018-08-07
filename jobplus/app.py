@@ -18,11 +18,6 @@ def register_extensions(app): #flask所需插件注册
     #flask_login 
     #使用flask_login插件，LoginManager类，实现注册
     login_manager = LoginManager()
-<<<<<<< HEAD
-'''
-    # 按照个人使用添加完善
-
-=======
     #调用.init_app方法初始化app
     login_manager.init_app(app)
     #使用user_loader装饰器注册一个函数，用来告诉flask_login,如何加在用户
@@ -32,7 +27,6 @@ def register_extensions(app): #flask所需插件注册
     #LoginManager类.login_view设置登录的路由
     #当用flask_login提供的login_required 装饰器保护一个路由时，用户未登会被定向到 login_view 指定的页面。
     login_manager.login_view = 'front.index'
->>>>>>> upstream/master
 
 def register_blueprints(app):
     from .handlers import blueprints
