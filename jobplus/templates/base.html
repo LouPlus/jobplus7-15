@@ -45,9 +45,12 @@
                 
                  <!--导航栏（左)-->
                 <ul class="nav navbar-nav">
-                    <li class='active'><a href="#">职位<span class='sr-only'>(current)</span></a></li>
-                    <li class="active"><a href="#">公司<span class='sr-only'>(current)</span></a></li>
-                    <!--(未实现）如果用户通过认证（authenticated）且是管理者，显示连接 -->
+                    <li class="{% if active == 'job' %}active{% endif %}"><a href="#">职位<span class='sr-only'>(current)</span></a></li>
+                    <li class="{% if active == 'company' %}active{% endif%}"><a href="#">公司<span class='sr-only'>(current)</span></a></li>
+                    <!--如果用户通过认证（authenticated）且是管理者，显示连接 -->
+                    {% if current_user.is_authenticated and current_user.admin  %}
+                    <li><a href="#">控制台</a></li>
+                    {% endif %}
 
 
                 </ul>  
@@ -55,27 +58,28 @@
                 <!--导航栏（右-->
                 <ul class="nav navbar-nav navbar-right">
                     <!--(未实现)根据是否认证，显示对应连接-->
-                    <li><a href='#'>用户注册</a></li>
-                    <li><a href='#'>企业注册</a></li>
-                    <li><a href='#'>登录</a></li>
+                    {% if not current_user.is_authenticated %}
+                    <li><a href='{{ url_for('front.userregister') }}'>用户注册</a></li>
+                    <li><a href='{{ url_for('front.companyregister') }}'>企业注册</a></li>
+                    <li><a href='{{ url_for('front.login') }}'>登录</a></li>
+                    {% else %}
+                    <li class='dropdown'>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span id="username">{{ current_user.username }}</span><span class="caret"></span></a>
+                    <ul class='dropdown-menu'>
+                        <li><a href='{{ url_for('user.profile') }}'>我的主页</a></li>
+                        <li role='separator' class='divider'></li>
+                        <li><a href='{{ url_for('front.logout') }}'>退出登录</a></li>
+                    {% endif %}
                 </ul>
             </div><!--.navbar-collapse-->
         </div><!--/.container -->
     </nav>
-    
-
-
-
-        <!--头部，流体（fluid）容器（container）-->
-        <div class='container-fluid header'>
-            {% block head %}{% endblock %}
-        </div>
 
 
         <!--用来显示flash 模块,加强用户体验-->
         <div class='container'>
         {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if message %}
+            {% if messages %}
             {% for category,message in messages %}
             <div class='alert alert-{{ category }} alert-dismissible' role='alert'>
                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
@@ -84,7 +88,14 @@
             {% endfor %}
             {% endif %}
         {% endwith %}
+        </div>
+
+        <!--头部，流体（fluid）容器（container）-->
+        <div class='header'>
+            {% block head %}{% endblock %}
+        </div>
         
+        <div class='container' >
         <!--身体-->
         {% block body%}{% endblock %}
 
@@ -92,8 +103,8 @@
         {% block footer %}
          <div class='footer'>Copyright @ 2018 By 实验楼</div>
         {% endblock %}
-
-    
+        </div><!--container-->
+           
 
     {% block tail_js %}
     <!--Bootstrap CND-->

@@ -23,8 +23,8 @@ class Base(db.Model):
 '''用户表和工作表的关联，投递职位，多对多'''
 user_job = db.Table(
     'user_job',
-    db.Column('user_id', db.Integer, db.ForeignKey('user_id', ondeleta='CASCADE')),
-    db.Column('job_id', db.Integer, db.ForeignKey('job_id', ondeleta='CASCADE'))
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id', ondelete='CASCADE')),
+    db.Column('job_id', db.Integer, db.ForeignKey('job.id', ondelete='CASCADE'))
 )
 
 
@@ -39,17 +39,21 @@ class User(Base, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, index=True, nullable=False)
     email = db.Column(db.String(64), unique=True, index=True, nullable=False)
-    password = db.Column('password', db.String(256), nullable=False)
+    phone = db.Column(db.String(11))
+    _password = db.Column('password', db.String(256), nullable=False)
     role = db.Column(db.SmallInteger, default=USER)     # 默认求职者用户
-    resume = db.Column(db.String(64), unique=True, index=True, nullable=False)   # 用户简历
+    resume = db.Column(db.String(64), unique=True, index=True)   # 用户简历
     upload_resume = db.Column(db.String(64))                           # 上传简练，string存储地址
     link_jobs = db.relationship('Job', secondary=user_job)
+    # User status (is disable?), True for Disbale, False for Enable
+    is_disable = db.Column(db.Boolean, default=False)
+    real_name = db.Column(db.String(20))
 
     def __repr__(self):
         return '<User:{}>'.format(self.username)
 
     @property
-    def _password(self):
+    def password(self):
         return self._password
 
     @password.setter
@@ -60,11 +64,11 @@ class User(Base, UserMixin):
         return check_password_hash(self._password, password)
 
     @property
-    def admin(self):
+    def is_admin(self):
         return self.role == self.ADMIN
 
     @property
-    def company(self):
+    def is_company(self):
         return self.role == self.COMPANY
 
 
@@ -73,12 +77,11 @@ class Company(Base):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), nullable=False, index=True, unique=True)
-    slug = db.Column(db.String(24), nullable=False, index=True, unique=True)
     logo = db.Column(db.String(64), nullable=False)
     # 网址
     site = db.Column(db.String(64), nullable=False)
     # 联系方式
-    contact = db.Column(db.String(24), nullable=False)
+    contact = db.Column(db.String(24))
     email = db.Column(db.String(24), nullable=False)
     # 地址
     location = db.Column(db.String(24), nullable=False)
@@ -95,7 +98,7 @@ class Company(Base):
     # 公司福利
     welfare = db.Column(db.String(256))
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondeleta='SET NULL'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
     user = db.relationship('User', uselist=False, backref=db.backref('company', uselist=False))
 
     def __repr__(self):
@@ -124,7 +127,7 @@ class Job(Base):
     # 被查看次数
     views = db.Column(db.Integer, default=0)
 
-    company_id = db.Column(db.Integer, db.ForeignKey('company.id', ondeleta='CASCADE'))
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id', ondelete='CASCADE'))
     company = db.relationship('Company', uselist=False)
 
 
@@ -138,8 +141,8 @@ class Status(Base):
     ARGEE = 3
 
     id = db.Column(db.Integer, primary_key=True)
-    job_id = db.Column(db.Integer, db.ForeignKey('job.id', ondeleta='SET NULL'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondeleta='SET NULL'))
+    job_id = db.Column(db.Integer, db.ForeignKey('job.id', ondelete='SET NULL'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
     status = db.Column(db.SmallInteger, default=REVIEW)
     # 企业回应
     response = db.Column(db.String(256))
