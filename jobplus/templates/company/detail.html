@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ company.name }}
+{% endblock %}
+
+{% block head %}
+<div class='jumbotron'>
+    <div class='container'>
+
+        <div class='col-md-3'>
+            <div class='thumbnail'>
+                <img src="{{ company.detail.logo }}">
+            </div><!--thumbnail-->
+        </div><!--col-md-3-->
+
+        <div class='col-md-9'>
+            <h2>{{ company.username }}</h2>
+            <p>{{ company.detail.description }}</p>
+            <a href="{{ company.detail.site}}">{{ company.detail.site }}</a>
+        </div><!--col-md-9-->
+
+    </div><!--container-->
+</div><!--jumgotron-->
+{% endblock %}
+
+
+{% block body %}
+<div class='col-md-8'>
+    <ul class='nav nav-tabs'>
+        <li role='presentation' class="{% if panel == 'about' %}active{% endif %}"> <a href="{{ url_for('company.detail',company_id=company.id,panel='about') }}">公司介绍</a></li>
+        <li role='presentation' class="{% if panel == 'job' %}active{% endif %}"><a href="{{ url_for('company.detail',company_id=company.id,panel='job')}}">在招职位</a></li>
+    </ul>
+
+    <div class='company-detail'>
+        {% if panel == 'about'%}
+            {{ company.detail.about  }}
+        {% else %}
+        {% for job in company.jobs %}
+        <div class='job-item'>
+            <a href='{{ url_for('job.detail',job_id=job.id) }}'>
+                <h4>{{ job.name }}<h4>
+                <p>
+                <span class='job-salary'>{{ job.low }}-{{ job.high }}</span><!--job-salary-->
+                &nbsp;
+                <span class='job-meta'>经验{{ job.experience }}{% if not job.experience == '不限' %}年{% endif %}{{ job.degree  }}</span>
+
+                </p>
+            </a>
+        </div><!--job-item-->
+        {% endfor %}
+        {% endif %}
+    </div><!--company-detail-->
+</div><!--col-md-8-->
+
+<div class='col-md-4'>
+    <h4>公司基本信息</h4>
+    <p>城市：{{ company.detail.location }}</p>
+</div>
+{% endblock %}
+
+

@@ -49,6 +49,9 @@ class User(Base, UserMixin):
     is_disable = db.Column(db.Boolean, default=False)
     real_name = db.Column(db.String(20))
 
+    #User 中company 接口
+    detail = db.relationship('Company',uselist=False)
+
     def __repr__(self):
         return '<User:{}>'.format(self.username)
 
@@ -76,7 +79,6 @@ class Company(Base):
     __tablename__ = 'company'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), nullable=False, index=True, unique=True)
     logo = db.Column(db.String(64), nullable=False)
     # 网址
     site = db.Column(db.String(64), nullable=False)
@@ -127,8 +129,9 @@ class Job(Base):
     # 被查看次数
     views = db.Column(db.Integer, default=0)
 
-    company_id = db.Column(db.Integer, db.ForeignKey('company.id', ondelete='CASCADE'))
-    company = db.relationship('Company', uselist=False)
+    #与User建立多对一关系.User删除,工作串联删除，User.jobs访问企业对应工作
+    company_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
+    company = db.relationship('User', uselist=False,backref=db.backref('jobs',lazy='dynamic'))
 
 
 class Status(Base):
