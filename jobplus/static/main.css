@@ -40,3 +40,8 @@
     color:#5cb85c;
     background:#fff;
 }
+
+.nav-pagination {
+    text-align: center;
+    clear: both;
+}

@@ -20,7 +20,7 @@
     <!--Bootstrap CDN 核心 CSS 文件 -->
     {% block head_css %}
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">                                                            
-    <link rel="stylesheet" href="static/main.css">                         
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">                         
     {% endblock %}
     </head>
 
@@ -45,8 +45,8 @@
                 
                  <!--导航栏（左)-->
                 <ul class="nav navbar-nav">
-                    <li class="{% if active == 'job' %}active{% endif %}"><a href="#">职位<span class='sr-only'>(current)</span></a></li>
-                    <li class="{% if active == 'company' %}active{% endif%}"><a href="#">公司<span class='sr-only'>(current)</span></a></li>
+                    <li class="{% if active == 'job' %}active{% endif %}"><a href="{{ url_for('job.index') }}">职位<span class='sr-only'>(current)</span></a></li>
+                    <li class="{% if active == 'company' %}active{% endif%}"><a href="{{ url_for('company.index') }}">公司<span class='sr-only'>(current)</span></a></li>
                     <!--如果用户通过认证（authenticated）且是管理者，显示连接 -->
                     {% if current_user.is_authenticated and current_user.is_admin  %}
                     <li><a href="{{ url_for('admin.index') }}">控制台</a></li>
