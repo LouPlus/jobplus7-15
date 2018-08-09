@@ -3,7 +3,7 @@
 
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin
+from flask_login import UserMixin,current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 db = SQLAlchemy()
 
@@ -49,6 +49,9 @@ class User(Base, UserMixin):
     is_disable = db.Column(db.Boolean, default=False)
     real_name = db.Column(db.String(20))
 
+    #User 中company 接口
+    detail = db.relationship('Company',uselist=False)
+
     def __repr__(self):
         return '<User:{}>'.format(self.username)
 
@@ -76,7 +79,6 @@ class Company(Base):
     __tablename__ = 'company'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), nullable=False, index=True, unique=True)
     logo = db.Column(db.String(64), nullable=False)
     # 网址
     site = db.Column(db.String(64), nullable=False)
@@ -127,9 +129,15 @@ class Job(Base):
     # 被查看次数
     views = db.Column(db.Integer, default=0)
 
-    company_id = db.Column(db.Integer, db.ForeignKey('company.id', ondelete='CASCADE'))
-    company = db.relationship('Company', uselist=False)
+    #与User建立多对一关系.User删除,工作串联删除，User.jobs访问企业对应工作
+    company_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
+    company = db.relationship('User', uselist=False,backref=db.backref('jobs',lazy='dynamic'))
 
+    #判断current_user(当前用户是否给该工作投递简历)
+    @property
+    def current_user_is_applied(self):
+        d = Dilivery.query.filter_by(job_id=self.id,user_id=current_user.id).first()
+        return (d is not None)
 
 class Status(Base):
     __tablename__ = 'status'
@@ -141,8 +149,25 @@ class Status(Base):
     ARGEE = 3
 
     id = db.Column(db.Integer, primary_key=True)
-    job_id = db.Column(db.Integer, db.ForeignKey('job.id', ondelete='SET NULL'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
+    job_id = db.Column(db.Integer, db.ForeignKey('job.id',ondelete='SET NULL'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id',ondelete='SET NULL'))
     status = db.Column(db.SmallInteger, default=REVIEW)
     # 企业回应
     response = db.Column(db.String(256))
+
+#记录User投递简历给Job 的数据
+class Dilivery(Base):
+    __tablename__ = 'delivery'
+
+    #等待企业审核
+    STATUS_WAITING = 1
+    #被拒绝
+    STATUS_REJECT = 2
+    #被接收，等待面试
+    STATUS_ACCEPT =3
+ 
+    id = db.Column(db.Integer,primary_key=True)
+    job_id = db.Column(db.Integer,db.ForeignKey('job.id',ondelete='SET NULL'))
+    user_id = db.Column(db.Integer,db.ForeignKey('user.id',ondelete='SET NULL'))
+    status = db.Column(db.SmallInteger,default=STATUS_WAITING)
+    response = db.Column(db.String(226))
