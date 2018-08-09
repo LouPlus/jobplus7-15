@@ -4,7 +4,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField,PasswordField,SubmitField, BooleanField, ValidationError, TextAreaField, IntegerField
 from wtforms.validators import Required,Length,EqualTo,Email,URL
-from jobplus.models import db,User,Company
+from jobplus.models import db,User,Company,Job
 
 
 #注册表单
@@ -192,3 +192,26 @@ class AddCompanyForm(FlaskForm):
         db.session.add(company)
         db.session.commit()
         return company
+
+class AddJobForm(FlaskForm):
+    name = StringField('职位名称', validators=[Length(3)])
+    low = IntegerField('最低薪酬', validators=[Required()])
+    high = IntegerField('最高薪酬', validators=[Required()])
+    experience = StringField('经验要求', validators=[Length(max=32)])
+    description = StringField('职位描述', validators=[Length(max=128)])
+    degree = StringField('职位学历要求', validators=[Length(max=32)])
+    submit = SubmitField('提交')
+
+    def create_job(self,company):
+        job = Job()
+        self.populate_obj(job)
+        job.company=company
+        db.session.add(job)
+        db.session.commit()
+        return job
+
+    def update_job(self,job):
+        self.populate_obj(job)
+        db.session.add(job)
+        db.session.commit()
+        return job

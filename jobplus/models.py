@@ -128,6 +128,8 @@ class Job(Base):
     up = db.Column(db.Boolean, default=True)
     # 被查看次数
     views = db.Column(db.Integer, default=0)
+    #职位描述
+    description = db.Column(db.String(128))
 
     #与User建立多对一关系.User删除,工作串联删除，User.jobs访问企业对应工作
     company_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
@@ -156,7 +158,7 @@ class Status(Base):
     response = db.Column(db.String(256))
 
 #记录User投递简历给Job 的数据
-class Dilivery(Base):
+class Delivery(Base):
     __tablename__ = 'delivery'
 
     #等待企业审核
