@@ -1,4 +1,4 @@
-{% extends "admin/admin_base.html" %}
+{% extends "job/admin_base.html" %}
 {% from "macros.html" import render_pagination %}
 
 {% block title %}
@@ -6,7 +6,7 @@ Admin - Jobs
 {% endblock %}
 
 {% block operation %}
-<a href="#" type="button" class="btn btn-primary">
+<a href="{{ url_for('job.addjob') }}" type="button" class="btn btn-primary">
     <span class="glyphicon glyphicon-plus" aira-hidden="true"></span>
     添加职位
 </a>
@@ -31,17 +31,17 @@ Admin - Jobs
                 <td>{% if job.up %}上线{% else %}下线{% endif %}</td>
                 <td>
                     <div class="btn-group" role="group">
-                        <a href="{% if job.up %}{{ url_for('job.jobaction', jobs_id=job.id, action='disable') }}{% else %}{{ url_for('job.jobaction', jobs_id=job.id, action='enable') }}{% endif %}" type="button" class="btn-defalut" title="{% if job.up %}下线{% else %}上线{% endif %}">
+                        <a href="{% if job.up %}{{ url_for('job.jobaction', job_id=job.id, action='disable') }}{% else %}{{ url_for('job.jobaction', job_id=job.id, action='enable') }}{% endif %}" type="button" class="btn-defalut" title="{% if job.up %}下线{% else %}上线{% endif %}">
                             {% if not job.up %}
                             <span class="glyphicon glyphicon-arrow-up" title="上线" aria-hidden="true"></span>
                             {% else %}
                             <span class="glyphicon glyphicon-arrow-down" title="下线" aria-hidden="true"></span>
                             {% endif %}
                         </a>
-                        <a href="#" type="button" class="btn-defalut" title="编辑">
+                        <a href="{{ url_for('job.editjob',job_id=job.id) }}" type="button" class="btn-defalut" title="编辑">
                                 <span class="glyphicon glyphicon-pencil" title="编辑" aria-hidden="true"></span>
                         </a>
-                        <a href="#" type="button" class="btn-defalut" title="删除">
+                        <a href="{{ url_for('job.deletejob',job_id=job.id) }}" type="button" class="btn-defalut" title="删除">
                                 <span class="glyphicon glyphicon-trash" title="删除" aria-hidden="true"></span>
                         </a>
                     </div>

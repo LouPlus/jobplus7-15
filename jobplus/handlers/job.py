@@ -42,7 +42,7 @@ def jobaction(job_id,action):
     #根据职位id创建job实例
     job = Job.query.get_or_404(job_id)
     #判别当前访问用户是否合法
-    if current_user.is_company and not current_user.company.id == job.company_id:
+    if current_user.is_company and not current_user.id == job.company_id:
         abort(404)
     #根据action修改job实例中的up状态
     if str(action) == 'disable':
@@ -62,9 +62,11 @@ def jobaction(job_id,action):
 @job.route('/admin')
 @company_required
 def admin():
-    company = current_user.company
+    if current_user.is_admin:
+        flash('Please login with company account','info')
+        return redirect(url_for('admin.index'))
     page = request.args.get('page', default=1, type=int)
-    pagination = Job.query.filter_by(company_id=company.id).paginate(
+    pagination = Job.query.filter_by(company_id=current_user.id).paginate(
         page = page,
         per_page = current_app.config['ADMIN_PER_PAGE'],
         error_out = False
@@ -77,7 +79,7 @@ def admin():
 def addjob():
     form = AddJobForm()
     if form.validate_on_submit():
-        form.create_job(company=current_user.company)
+        form.create_job(company=current_user)
         flash('职位添加成功','success')
         return redirect(url_for('job.admin'))
     return render_template('job/addjob.html', form=form)
@@ -88,7 +90,7 @@ def addjob():
 def editjob(job_id):
     job = Job.query.get_or_404(job_id)
     #判断当前用户是否合法
-    if not current_user.company.id == job.company_id:
+    if not current_user.id == job.company_id:
         abort(404)
     form = AddJobForm(obj=job)
     if form.validate_on_submit():
@@ -103,7 +105,7 @@ def editjob(job_id):
 def deletejob(job_id):
     job = Job.query.get_or_404(job_id)
     #判断当前用户是否合法
-    if not current_user.company.id == job.company_id:
+    if not current_user.id == job.company_id:
         abort(404)
     db.session.delete(job)
     db.session.commit()

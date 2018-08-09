@@ -133,7 +133,7 @@ class Job(Base):
 
     #与User建立多对一关系.User删除,工作串联删除，User.jobs访问企业对应工作
     company_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
-    company = db.relationship('User', uselist=False,backref=db.backref('jobs',lazy='dynamic'))
+    company = db.relationship('User', uselist=False,backref=db.backref('job',lazy='dynamic'))
 
     #判断current_user(当前用户是否给该工作投递简历)
     @property

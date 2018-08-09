@@ -155,8 +155,8 @@ class AddCompanyForm(FlaskForm):
     submit = SubmitField('完成')
 
     def validate_name(self, field):
-        if Company.query.filter_by(name=field.data).first():
-            raise ValidationError('公司已经存在')
+        if User.query.filter_by(username=field.data).first():
+            raise ValidationError('公司名称已经存在')
     
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
@@ -169,7 +169,7 @@ class AddCompanyForm(FlaskForm):
             password=self.password.data,
             role=20
         )
-        company = Company(name=self.name.data,
+        company = Company(
                        email=self.email.data,
                        site=self.site.data,
                        description=self.description.data,
@@ -185,7 +185,7 @@ class AddCompanyForm(FlaskForm):
     def update_company(self,company):
         company.user.email = self.email.data
         company.user.password = self.password.data
-        company.name = self.name.data
+        company.user.username = self.name.data
         company.email = self.email.data
         company.site = self.site.data
         company.description = self.description.data
