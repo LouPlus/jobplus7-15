@@ -52,7 +52,7 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         # 使用flask-login模块，login_user函数（传入User对象，布尔值）实现注册
         login_user(user,form.remember_me.data)
-        next = 'user.profile'
+        next = 'front.index'
         # Check if the user is banned
         if user.is_disable :
             flash('当前用户被禁用','info')
@@ -60,7 +60,10 @@ def login():
         if user.is_admin:
             next = 'admin.index'
         if user.is_company:
-            next = 'company.profile'
+            if user.company:
+                next = 'front.index'
+            else:
+                next = 'company.profile'
         return redirect(url_for(next))
     return render_template('login.html',form=form)
 
