@@ -28,7 +28,7 @@ Admin - Jobs
                 <td>{% if job.up %}上线{% else %}下线{% endif %}</td>
                 <td>
                     <div class="btn-group" role="group">
-                        <a href="{% if job.up %}{{ url_for('job.jobaction', jobs_id=job.id, action='disable') }}{% else %}{{ url_for('job.jobaction', jobs_id=job.id, action='enable') }}{% endif %}" type="button" class="btn-defalut" title="{% if job.up %}下线{% else %}上线{% endif %}">
+                        <a href="{% if job.up %}{{ url_for('job.jobaction', job_id=job.id, action='disable') }}{% else %}{{ url_for('job.jobaction', job_id=job.id, action='enable') }}{% endif %}" type="button" class="btn-defalut" title="{% if job.up %}下线{% else %}上线{% endif %}">
                             {% if not job.up %}
                             <span class="glyphicon glyphicon-arrow-up" title="上线" aria-hidden="true"></span>
                             {% else %}
