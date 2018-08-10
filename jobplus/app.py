@@ -33,25 +33,26 @@ def register_blueprints(app):
     for bp in blueprints:
         app.register_blueprint(bp)
 
+
 def register_error_handlers(app):
     '''因为使用接口通信，出错也返回json数据'''
     @app.errorhandler(404)
     def not_found(error):
-        return render_template('error/404.html'),404
+        return render_template('error/404.html'), 404
 
     @app.errorhandler(500)
     def server_error(error):
-        return render_template('error/500.html'),500
+        return render_template('error/500.html'), 500
 
 
 def create_app(config):
     '''APP工厂'''
     app = Flask(__name__)
 
-    if isinstance(config,dict):      
+    if isinstance(config, dict):
         app.config.update(config)
     else:
-        app.config.from_object(configs.get(config,None))
+        app.config.from_object(configs.get(config, None))
 
     register_extensions(app)
     register_blueprints(app)

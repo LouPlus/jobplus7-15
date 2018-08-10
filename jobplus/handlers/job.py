@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, current_app, request
+from flask import Blueprint, render_template, current_app, request, flash, redirect, url_for
 from jobplus.models import Job,Dilivery,db
 from flask_login import current_user,login_required
 
@@ -14,6 +14,14 @@ def index():
         error_out = False
     )
     return render_template('job/index.html', pagination=pagination, active='job')
+
+
+# 为职位详情添加路由
+@job.route('/<int:job_id>')
+def detail(job_id):
+    job = Job.query.get_or_404(job_id)
+    return render_template('job/detail.html', job=job, active='')
+
 
 #为配置
 #添加简历投递路由
