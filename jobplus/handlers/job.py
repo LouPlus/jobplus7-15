@@ -47,7 +47,7 @@ def jobaction(job_id,action):
     #根据action修改job实例中的up状态
     if str(action) == 'disable':
         job.up=False
-    if (action) == 'enable':
+    if str(action) == 'enable':
         job.up=True
     db.session.add(job)
     db.session.commit()
@@ -111,3 +111,61 @@ def deletejob(job_id):
     db.session.commit()
     flash('职位删除成功','success')
     return redirect(url_for('job.admin'))
+
+#企业简历管理-未审核列表
+@job.route('/apply/todolist')
+@company_required
+def todolist():
+    page = request.args.get('page', default=1, type=int)
+    #筛选当前企业用户所属未审核简历
+    pagination = Delivery.query.filter((Delivery.job.company_id == current_user.id) & (Delivery.status == 1)).paginate(
+        page = page,
+        per_page = current_app.config['ADMIN_PER_PAGE'],
+        error_out = False
+    )
+    return render_template('job/todolist.html',pagination=pagination)
+
+#企业建立管理-简历操作
+@job.route('/apply/<int:deliv_id>/<action>')
+@company_required
+def delivaction(deliv_id,action):
+    deliv = Delivery.get_or_404(deliv_id)
+    #判断当前用户是否合法
+    if deliv.job.company_id != current_user.id:
+        abort(404)
+    #根据action不同，进行不同操作
+    if str(action) == 'reject':
+        deliv.status = 2
+        flash('简历拒绝成功','success')
+    if str(action) == 'interview':
+        deliv.status = 3
+        flash('简历进入面试成功','success')
+    db.session.add(deliv)
+    db.session.commit()
+    return redirect(url_for('job.todolist'))
+
+#企业简历管理-面试列表
+@job.route('/apply/interviewlist')
+@company_required
+def interviewlist():
+    page = request.args.get('page', default=1, type=int)
+    #筛选当前企业用户所属面试简历
+    pagination = Delivery.query.filter((Delivery.job.company_id == current_user.id) & (Delivery.status == 3)).paginate(
+        page = page,
+        per_page = current_app.config['ADMIN_PER_PAGE'],
+        error_out = False
+    )
+    return render_template('job/interview.html',pagination=pagination)
+
+#企业简历管理-不合适列表
+@job.route('/apply/rejectlist')
+@company_required
+def rejectlist():
+    page = request.args.get('page', default=1, type=int)
+    #筛选当前企业用户所属未审核简历
+    pagination = Delivery.query.filter((Delivery.job.company_id == current_user.id) & (Delivery.status == 2)).paginate(
+        page = page,
+        per_page = current_app.config['ADMIN_PER_PAGE'],
+        error_out = False
+    )
+    return render_template('job/rejectlist.html',pagination=pagination)

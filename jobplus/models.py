@@ -138,7 +138,7 @@ class Job(Base):
     #判断current_user(当前用户是否给该工作投递简历)
     @property
     def current_user_is_applied(self):
-        d = Dilivery.query.filter_by(job_id=self.id,user_id=current_user.id).first()
+        d = Delivery.query.filter_by(job_id=self.id,user_id=current_user.id).first()
         return (d is not None)
 
 class Status(Base):
@@ -166,10 +166,20 @@ class Delivery(Base):
     #被拒绝
     STATUS_REJECT = 2
     #被接收，等待面试
-    STATUS_ACCEPT =3
+    STATUS_ACCEPT = 3
  
     id = db.Column(db.Integer,primary_key=True)
     job_id = db.Column(db.Integer,db.ForeignKey('job.id',ondelete='SET NULL'))
     user_id = db.Column(db.Integer,db.ForeignKey('user.id',ondelete='SET NULL'))
     status = db.Column(db.SmallInteger,default=STATUS_WAITING)
     response = db.Column(db.String(226))
+
+    #Get delivery from which user
+    @property
+    def user(self):
+        return User.query.get(self.user_id)
+
+    #Get delivery to which job
+    @property
+    def job(self):
+        return Job.query.get(self.job_id)
