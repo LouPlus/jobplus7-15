@@ -5,3 +5,4 @@ flask-migrate
 flask-wtf
 flask-login
 werkzeug
+faker

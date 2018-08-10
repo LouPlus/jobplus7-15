@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, current_app, redirect, url_for, flash
-from jobplus.decorators import admin_required
-from jobplus.models import User, Company, db
+from jobplus.decorators import admin_required, company_required
+from jobplus.models import User, Company, Job, db
 from jobplus.forms import RegisterForm, AddUserForm, AddCompanyForm
 
 admin = Blueprint('admin',__name__,url_prefix='/admin')
@@ -74,3 +74,14 @@ def useraction(user_id,action):
     db.session.add(user)
     db.session.commit()
     return redirect(url_for('admin.users'))
+
+@admin.route('/jobs')
+@admin_required
+def jobs():
+    page = request.args.get('page', default=1, type=int)
+    pagination = Job.query.paginate(
+        page=page,
+        per_page=current_app.config['ADMIN_PER_PAGE'],
+        error_out=False
+    )
+    return render_template('admin/jobs.html',pagination=pagination)

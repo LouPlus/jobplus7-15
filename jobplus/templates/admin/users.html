@@ -5,16 +5,6 @@
 Admin - Users
 {% endblock %}
 
-{% block operation %}
-<a href="{{ url_for('admin.adduser') }}" type="button" class="btn btn-primary">
-    <span class="glyphicon glyphicon-plus" aira-hidden="true"></span>
-    添加求职者
-</a>
-<a href="{{ url_for('admin.addcompany') }}" type="button" class="btn btn-primary">
-    <span class="glyphicon glyphicon-plus" aira-hidden="true"></span>
-    添加企业
-</a>
-{% endblock %}
 
 {% block admin %}
 <table class="table">
@@ -43,7 +33,7 @@ Admin - Users
                 <td>{% if user.is_company %}{{ user.company.site }}{% else %}{% endif %}</td>
                 <td>
                     <div class="btn-group" role="group">
-                        <a href="{% if user.is_company %}{{ url_for('admin.editcompany', company_id=user.company.id) }}{% else %}{{ url_for('admin.edituser', user_id=user.id) }}{% endif %}" type="button" class="btn-defalut" title="编辑">
+                        <a href="{% if user.is_company %}{{ url_for('admin.editcompany', company_id=user.id) }}{% else %}{{ url_for('admin.edituser', user_id=user.id) }}{% endif %}" type="button" class="btn-defalut" title="编辑">
                             <span class="glyphicon glyphicon-pencil" title="编辑" aria-hidden="true"></span>
                         </a>
                         <a href="{% if user.is_disable %}{{ url_for('admin.useraction',user_id=user.id,action='enable') }}{% else %}{{ url_for('admin.useraction',user_id=user.id,action='disable') }}{% endif %}" type="button" class="btn-defalut" title="{% if user.is_disable %}启用{% else %}禁用{% endif %}">

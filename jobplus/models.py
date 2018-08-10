@@ -128,15 +128,17 @@ class Job(Base):
     up = db.Column(db.Boolean, default=True)
     # 被查看次数
     views = db.Column(db.Integer, default=0)
+    #职位描述
+    description = db.Column(db.String(128))
 
     #与User建立多对一关系.User删除,工作串联删除，User.jobs访问企业对应工作
     company_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
-    company = db.relationship('User', uselist=False,backref=db.backref('jobs',lazy='dynamic'))
+    company = db.relationship('User', uselist=False,backref=db.backref('job',lazy='dynamic'))
 
     #判断current_user(当前用户是否给该工作投递简历)
     @property
     def current_user_is_applied(self):
-        d = Dilivery.query.filter_by(job_id=self.id,user_id=current_user.id).first()
+        d = Delivery.query.filter_by(job_id=self.id,user_id=current_user.id).first()
         return (d is not None)
 
 class Status(Base):
@@ -156,7 +158,7 @@ class Status(Base):
     response = db.Column(db.String(256))
 
 #记录User投递简历给Job 的数据
-class Dilivery(Base):
+class Delivery(Base):
     __tablename__ = 'delivery'
 
     #等待企业审核
@@ -164,10 +166,23 @@ class Dilivery(Base):
     #被拒绝
     STATUS_REJECT = 2
     #被接收，等待面试
-    STATUS_ACCEPT =3
+    STATUS_ACCEPT = 3
  
     id = db.Column(db.Integer,primary_key=True)
-    job_id = db.Column(db.Integer,db.ForeignKey('job.id',ondelete='SET NULL'))
+    # SET ondelete to CASCADE, avoding TypeError in Jinja.
+    job_id = db.Column(db.Integer,db.ForeignKey('job.id',ondelete='CASCADE'))
     user_id = db.Column(db.Integer,db.ForeignKey('user.id',ondelete='SET NULL'))
+    # The company_id of who published the job.
+    company_id = db.Column(db.Integer,db.ForeignKey('user.id',ondelete='SET NULL'))
     status = db.Column(db.SmallInteger,default=STATUS_WAITING)
     response = db.Column(db.String(226))
+
+    #Get delivery from which user
+    @property
+    def user(self):
+        return User.query.get(self.user_id)
+
+    #Get delivery to which job
+    @property
+    def job(self):
+        return Job.query.get(self.job_id)

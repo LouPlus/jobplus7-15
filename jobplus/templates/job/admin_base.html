@@ -1,0 +1,40 @@
+<!--
+    block title
+    block operation
+    block admin
+-->
+{% extends "base.html" %}
+
+<!-- set highlight to the admin button -->
+{% set active = 'admin' %}
+
+{% block title %}
+企业职位管理
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-3">
+        <h4>管理</h4>
+        <div class="list-group">
+            <a href="{{ url_for('job.admin') }}" class="list-group-item">职位管理</a>
+            <a href="{{ url_for('job.todolist') }}" class="list-group-item">简历管理</a>
+        </div>
+
+        {% block operation %}
+        <a href="{{ url_for('job.todolist') }}" type="button" class="btn btn-primary btn-block">
+            未处理列表
+        </a>
+        <a href="{{ url_for('job.rejectlist') }}" type="button" class="btn btn-primary btn-block">
+            不合适列表
+        </a>
+        <a href="{{ url_for('job.interviewlist') }}" type="button" class="btn btn-primary btn-block">
+            面试列表
+        </a>
+        {% endblock %}
+    </div>
+    <div class="col-md-9">
+        {% block admin %}{% endblock %}
+    </div>
+</div>
+{% endblock %}
