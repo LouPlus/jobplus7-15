@@ -22,7 +22,20 @@
         </div>
 
         {% block operation %}
-
+        <div class="btn-group btn-group-justified">
+            <a href="{{ url_for('job.todolist') }}" type="button" class="btn btn-primary">
+                <span class="glyphicon glyphicon-th-list" aira-hidden="true"></span>
+                未处理列表
+            </a>
+            <a href="{{ url_for('job.rejectlist') }}" type="button" class="btn btn-primary">
+                <span class="glyphicon glyphicon-remove" aira-hidden="true"></span>
+                不合适列表
+            </a>
+            <a href="{{ url_for('job.interviewlist') }}" type="button" class="btn btn-primary">
+                <span class="glyphicon glyphicon-user" aira-hidden="true"></span>
+                面试列表
+            </a>
+        </div>
         {% endblock %}
     </div>
     <div class="col-md-9">
