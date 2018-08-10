@@ -4,7 +4,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField,PasswordField,SubmitField, BooleanField, ValidationError, TextAreaField, IntegerField
 from wtforms.validators import Required,Length,EqualTo,Email,URL
-from jobplus.models import db,User,Company
+from jobplus.models import db,User,Company,Job
 
 
 #注册表单
@@ -155,8 +155,8 @@ class AddCompanyForm(FlaskForm):
     submit = SubmitField('完成')
 
     def validate_name(self, field):
-        if Company.query.filter_by(name=field.data).first():
-            raise ValidationError('公司已经存在')
+        if User.query.filter_by(username=field.data).first():
+            raise ValidationError('公司名称已经存在')
     
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
@@ -169,7 +169,7 @@ class AddCompanyForm(FlaskForm):
             password=self.password.data,
             role=20
         )
-        company = Company(name=self.name.data,
+        company = Company(
                        email=self.email.data,
                        site=self.site.data,
                        description=self.description.data,
@@ -185,10 +185,33 @@ class AddCompanyForm(FlaskForm):
     def update_company(self,company):
         company.user.email = self.email.data
         company.user.password = self.password.data
-        company.name = self.name.data
+        company.user.username = self.name.data
         company.email = self.email.data
         company.site = self.site.data
         company.description = self.description.data
         db.session.add(company)
         db.session.commit()
         return company
+
+class AddJobForm(FlaskForm):
+    name = StringField('职位名称', validators=[Length(3)])
+    low = IntegerField('最低薪酬', validators=[Required()])
+    high = IntegerField('最高薪酬', validators=[Required()])
+    experience = StringField('经验要求', validators=[Length(max=32)])
+    description = StringField('职位描述', validators=[Length(max=128)])
+    degree = StringField('职位学历要求', validators=[Length(max=32)])
+    submit = SubmitField('提交')
+
+    def create_job(self,company):
+        job = Job()
+        self.populate_obj(job)
+        job.company=company
+        db.session.add(job)
+        db.session.commit()
+        return job
+
+    def update_job(self,job):
+        self.populate_obj(job)
+        db.session.add(job)
+        db.session.commit()
+        return job

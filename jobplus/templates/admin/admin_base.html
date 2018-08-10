@@ -15,10 +15,17 @@ Admin
         <h4>管理</h4>
         <div class="list-group">
             <a href="{{ url_for('admin.users') }}" class="list-group-item">用户</a>
-            <a href="#" class="list-group-item">职位</a>
+            <a href="{{ url_for('admin.jobs') }}" class="list-group-item">职位</a>
         </div>
 
         {% block operation %}
+        <a href="{{ url_for('admin.adduser') }}" type="button" class="btn btn-primary btn-block">
+            添加求职者
+        </a>
+        
+        <a href="{{ url_for('admin.addcompany') }}" type="button" class="btn btn-primary text-left btn-block">
+            添加企业
+        </a>
         {% endblock %}
     </div>
     <div class="col-md-9">
