@@ -46,8 +46,8 @@ def iter_jobs():
                 low = randint(6000,10000),
                 high = randint(10001,20000),
                 tags = fake.color_name(),
-                experience = fake.text(),
-                description = fake.text(),
+                experience = fake.text(max_nb_chars=30),
+                description = fake.text(max_nb_chars=100),
                 company=company_user
                 )
 
