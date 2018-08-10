@@ -118,7 +118,7 @@ def deletejob(job_id):
 def todolist():
     page = request.args.get('page', default=1, type=int)
     #筛选当前企业用户所属未审核简历
-    pagination = Delivery.query.filter((Delivery.job.company_id == current_user.id) & (Delivery.status == 1)).paginate(
+    pagination = Delivery.query.filter((Delivery.company_id == current_user.id) & (Delivery.status == 1)).paginate(
         page = page,
         per_page = current_app.config['ADMIN_PER_PAGE'],
         error_out = False
@@ -129,7 +129,7 @@ def todolist():
 @job.route('/apply/<int:deliv_id>/<action>')
 @company_required
 def delivaction(deliv_id,action):
-    deliv = Delivery.get_or_404(deliv_id)
+    deliv = Delivery.query.get_or_404(deliv_id)
     #判断当前用户是否合法
     if deliv.job.company_id != current_user.id:
         abort(404)
@@ -150,12 +150,12 @@ def delivaction(deliv_id,action):
 def interviewlist():
     page = request.args.get('page', default=1, type=int)
     #筛选当前企业用户所属面试简历
-    pagination = Delivery.query.filter((Delivery.job.company_id == current_user.id) & (Delivery.status == 3)).paginate(
+    pagination = Delivery.query.filter((Delivery.company_id == current_user.id) & (Delivery.status == 3)).paginate(
         page = page,
         per_page = current_app.config['ADMIN_PER_PAGE'],
         error_out = False
     )
-    return render_template('job/interview.html',pagination=pagination)
+    return render_template('job/interviewlist.html',pagination=pagination)
 
 #企业简历管理-不合适列表
 @job.route('/apply/rejectlist')
@@ -163,7 +163,7 @@ def interviewlist():
 def rejectlist():
     page = request.args.get('page', default=1, type=int)
     #筛选当前企业用户所属未审核简历
-    pagination = Delivery.query.filter((Delivery.job.company_id == current_user.id) & (Delivery.status == 2)).paginate(
+    pagination = Delivery.query.filter((Delivery.company_id == current_user.id) & (Delivery.status == 2)).paginate(
         page = page,
         per_page = current_app.config['ADMIN_PER_PAGE'],
         error_out = False

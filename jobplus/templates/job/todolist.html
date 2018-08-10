@@ -47,7 +47,7 @@
                 <td>{{ deliv.updated_at }}</td>
                 <td>
                     <div class="btn-group" role="group">
-                        <a href="{{ url_for('job.delivaction', deliv_id=deliv.id, action='reject')" type="button" class="btn-defalut" title="不合适">
+                        <a href="{{ url_for('job.delivaction', deliv_id=deliv.id, action='reject') }}" type="button" class="btn-defalut" title="不合适">
                             <span class="glyphicon glyphicon-ban-circle" title="不合适" aria-hidden="true"></span>
                             不合适
                         </a>

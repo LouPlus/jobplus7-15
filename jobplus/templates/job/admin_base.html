@@ -5,6 +5,9 @@
 -->
 {% extends "base.html" %}
 
+<!-- set highlight to the admin button -->
+{% set active = 'admin' %}
+
 {% block title %}
 企业职位管理
 {% endblock %}
@@ -15,9 +18,11 @@
         <h4>管理</h4>
         <div class="list-group">
             <a href="{{ url_for('job.admin') }}" class="list-group-item">职位管理</a>
+            <a href="{{ url_for('job.todolist') }}" class="list-group-item">简历管理</a>
         </div>
 
         {% block operation %}
+
         {% endblock %}
     </div>
     <div class="col-md-9">

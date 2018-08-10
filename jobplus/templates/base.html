@@ -51,6 +51,11 @@
                     {% if current_user.is_authenticated and current_user.is_admin  %}
                     <li><a href="{{ url_for('admin.index') }}">控制台</a></li>
                     {% endif %}
+                    <!-- if current user was company that show the Admin button -->
+                    {% if current_user.is_authenticated and current_user.is_company  %}
+                    <li class="{% if active == 'admin' %}active{% endif %}"><a href="{{ url_for('job.admin') }}">管理</a></li>
+                    {% endif %}
+
 
 
                 </ul>  

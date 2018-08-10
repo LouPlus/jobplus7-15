@@ -169,8 +169,11 @@ class Delivery(Base):
     STATUS_ACCEPT = 3
  
     id = db.Column(db.Integer,primary_key=True)
-    job_id = db.Column(db.Integer,db.ForeignKey('job.id',ondelete='SET NULL'))
+    # SET ondelete to CASCADE, avoding TypeError in Jinja.
+    job_id = db.Column(db.Integer,db.ForeignKey('job.id',ondelete='CASCADE'))
     user_id = db.Column(db.Integer,db.ForeignKey('user.id',ondelete='SET NULL'))
+    # The company_id of who published the job.
+    company_id = db.Column(db.Integer,db.ForeignKey('user.id',ondelete='SET NULL'))
     status = db.Column(db.SmallInteger,default=STATUS_WAITING)
     response = db.Column(db.String(226))
 
