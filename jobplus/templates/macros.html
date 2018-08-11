@@ -73,9 +73,6 @@
             <div class="caption">
               <b>{{ job.name }}</b>
               <p>经验{{ job.experience }} {% if job.experience != '不限' %}年{% endif %} 学历{{ job.degree }}</p>
-              {% for tag in job.tags %}
-              <span class="label label-default">{{ tag }}</span>
-              {% endfor %}
             </div>
             <hr>
             <div class="media">
