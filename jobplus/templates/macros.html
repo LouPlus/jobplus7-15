@@ -3,7 +3,7 @@
 <form method='POST' action='{{ url }}'>
 <!--用form标签包裹宏，POST方法上传数据，上传的路由地址-->
     {{form.csrf_token}}
-    <!--产生csrf_tokenֵ值，这个值用来防护csrf攻击-->
+    <!--产生csrf_token值，这个值用来防护csrf攻击-->
     {% for field in form %}
 
         {%if field.type == 'CSRFTokenField' %}
@@ -95,11 +95,15 @@
 {% macro render_company(company) %}
 <div class="col-sm-6 col-md-3 company-item">
         <div class="thumbnail">
-            <img src="{{ company.logo }}" width="100" height="100" alt="...">
-            <h3>{{ company.name }}</h3>
-            <p>总部：{{ company.location }}</p>
+            <a href='{{ url_for('company.detail',company_id=company.id) }}'>
+                <img src="{{ company.logo }}" width="100" height="100" alt="...">
+                <h3>{{ company.user.username }}</h3>
+                <p>总部：{{ company.location }}</p>
+            </a>
         <hr>
-        <p>在招职位：12</p>
+        <a href='#'>
+        <p>在招职位：{{ company.user.job.count() }}</p>
+        </a>
         </div>
       </div>
 {% endmacro %}
