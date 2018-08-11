@@ -27,7 +27,7 @@
 </div>
 </div>
 <p class='list-more text-center'>
-<a href='#' class='btn btn-success btn-lg list-more-btn'>查看更多</a>
+<a href='{{ url_for('job.index') }}' class='btn btn-success btn-lg list-more-btn'>查看更多</a>
 </p>
 
 
@@ -45,6 +45,6 @@
 </div><!--newest-company-list-->
 </div>
 <p class='list-more text-center'>
-<a href='#' class='btn btn-success btn-lg list-more-btn'>查看更多</a>
+<a href='{{ url_for('company.index') }}' class='btn btn-success btn-lg list-more-btn'>查看更多</a>
 
 {% endblock %}

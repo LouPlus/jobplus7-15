@@ -70,19 +70,22 @@
 {% macro render_job(job) %}
 <div class="col-sm-6 col-md-4">
         <div class="job-box">
+            <a href="{{ url_for('job.detail',job_id=job.id) }}">
             <div class="caption">
               <b>{{ job.name }}</b>
               <p>经验{{ job.experience }} {% if job.experience != '不限' %}年{% endif %} 学历{{ job.degree }}</p>
             </div>
+            </a>
             <hr>
             <div class="media">
               <div class="media-left">
-                <a href="#">
+
+                <a href="{{ url_for('company.detail',company_id=job.company.id) }}">
                 <img class="media-object" src="{{ job.company.logo }}" width="40" height="40" alt="...">
                 </a>
                 </div>
-                <div class="media-body"><h4 class="media-heading">{{ job.company.name }}</h4>
-                <span class="company-meta">{{ job.company.location }}/{{ job.company.description }}</span>
+                <div class="media-body"><h4 class="media-heading">{{ job.company.username }}</h4>
+                <span class="company-meta">{{ job.company.detail.location }}/{{ job.company.detail.description }}</span>
                 </div>
             </div>
         </div>
@@ -98,9 +101,7 @@
                 <p>总部：{{ company.location }}</p>
             </a>
         <hr>
-        <a href='#'>
         <p>在招职位：{{ company.user.job.count() }}</p>
-        </a>
         </div>
       </div>
 {% endmacro %}
