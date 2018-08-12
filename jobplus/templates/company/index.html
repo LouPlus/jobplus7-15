@@ -4,13 +4,14 @@
 
 {% block title %}公司列表{% endblock %}
 
-
 {% block body %}
 <div class="jumbotron">
-  <h1>Todo: 公司过滤</h1>
+        <h1>Company</h1>
+        <p>新加入企业</p>
 </div>
 
-<div class="job-list">
+
+<div class="company-list">
   {% for company in pagination.items %}
     {{ render_company(company) }}
   {% endfor %}
